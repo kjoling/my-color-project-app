@@ -3,7 +3,6 @@ import ColorBox from "./ColorBox";
 import "./Palette.css";
 
 export default function Palette(props) {
-  console.log(props);
   const colorBoxes = props.colors.map((color) => (
     <ColorBox background={color.color} name={color.name} />
   ));
