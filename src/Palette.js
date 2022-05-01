@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import ColorBox from "./ColorBox";
 import "./Palette.css";
 import Navbar from "./Navbar";
+import { palette } from "@mui/system";
 
 export default function Palette(props) {
   const [level, setLevel] = useState(500);
   const [format, setFormat] = useState("hex");
-  const { colors } = props.palette;
+  const { colors, paletteName, emoji } = props.palette;
   const colorBoxes = colors[level].map((color) => {
     return (
       <ColorBox
@@ -32,9 +33,11 @@ export default function Palette(props) {
         level={level}
         changeFormat={changeFormat}
       />
-      {/*Navbar goes here*/}
       <div className="Palette-colors">{colorBoxes}</div>
-      {/*footer goes here*/}
+      <footer className="Palette-footer">
+        {paletteName}
+        <span className="emoji">{emoji}</span>
+      </footer>
     </div>
   );
 }
