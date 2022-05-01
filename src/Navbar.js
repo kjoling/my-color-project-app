@@ -3,15 +3,22 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "./Navbar.css";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { MenuItem } from "@mui/material";
+import { MenuItem, IconButton } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Navbar(props) {
   const { level, changeLevel, changeFormat } = props;
   const [format, setFormat] = useState("hex");
+  const [open, setOpen] = useState(false);
 
-  const handleChange = (evt) => {
+  const handleFormatChange = (evt) => {
     setFormat(evt.target.value);
     changeFormat(evt);
+    setOpen(true);
+  };
+  const closeSnackbar = () => {
+    setOpen(false);
   };
   return (
     <nav className="Navbar">
@@ -43,12 +50,32 @@ export default function Navbar(props) {
         </div>
       </div>
       <div className="select-container">
-        <Select value={format} onChange={handleChange}>
+        <Select value={format} onChange={handleFormatChange}>
           <MenuItem value="hex">HEX - #ffffff</MenuItem>
           <MenuItem value="rgb">RGB - rgb(255, 255, 255) </MenuItem>
           <MenuItem value="rgba">RGBA - rgba(255, 255, 255, 1.0)</MenuItem>
         </Select>
       </div>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        open={open}
+        onClose={closeSnackbar}
+        message={<span>Format changed to {format.toUpperCase()}</span>}
+        autoHideDuration={3000}
+        ContentProps={{
+          "aria-describedby": "message-id",
+        }}
+        action={[
+          <IconButton
+            onClick={closeSnackbar}
+            color="inherit"
+            key="close"
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>,
+        ]}
+      />
     </nav>
   );
 }
