@@ -3,12 +3,28 @@ import ColorBox from "./ColorBox";
 import "./Palette.css";
 import Navbar from "./Navbar";
 import { palette } from "@mui/system";
+import seedColors from "./seedColors";
+import { generatePalette } from "./ColorHelper";
+import { useParams } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 
 export default function Palette(props) {
   const [level, setLevel] = useState(500);
   const [format, setFormat] = useState("hex");
-  const { colors, paletteName, emoji } = props.palette;
-  const colorBoxes = colors[level].map((color) => {
+  const { paletteId } = useParams();
+
+  const findPalette = (id) => {
+    return seedColors.find(function (palette) {
+      return palette.id.toLowerCase() === id.toLowerCase();
+    });
+  };
+  if (findPalette(paletteId) === undefined) {
+    return <Navigate to="/" replace />;
+  }
+
+  const palette = generatePalette(findPalette(paletteId));
+
+  const colorBoxes = palette.colors[level].map((color) => {
     return (
       <ColorBox
         background={color[format]}
@@ -35,8 +51,8 @@ export default function Palette(props) {
       />
       <div className="Palette-colors">{colorBoxes}</div>
       <footer className="Palette-footer">
-        {paletteName}
-        <span className="emoji">{emoji}</span>
+        {palette.paletteName}
+        <span className="emoji">{palette.emoji}</span>
       </footer>
     </div>
   );

@@ -38,7 +38,6 @@ const generatePalette = (starterPalette) => {
   for (let level of LEVELS) {
     newPalette.colors[level] = [];
   }
-
   for (let color of starterPalette.colors) {
     let scales = getScale(color.color, 10).reverse();
     for (let scale in scales) {
