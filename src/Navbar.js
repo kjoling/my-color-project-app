@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "./Navbar.css";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import { MenuItem, IconButton } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
+import { Link } from "react-router-dom";
 
 export default function Navbar(props) {
   const { level, changeLevel, changeFormat } = props;
@@ -23,7 +24,7 @@ export default function Navbar(props) {
   return (
     <nav className="Navbar">
       <div className="logo">
-        <a href="/">ReactColorPicker</a>
+        <Link to="/">React Color Picker</Link>
       </div>
       <div className="slider-container">
         <span>Level: {level} </span>

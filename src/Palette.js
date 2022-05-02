@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import ColorBox from "./ColorBox";
 import "./Palette.css";
 import Navbar from "./Navbar";
-import { palette } from "@mui/system";
 import seedColors from "./seedColors";
 import { generatePalette } from "./ColorHelper";
 import { useParams } from "react-router-dom";
-import { Route, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export default function Palette(props) {
   const [level, setLevel] = useState(500);
@@ -18,6 +17,7 @@ export default function Palette(props) {
       return palette.id.toLowerCase() === id.toLowerCase();
     });
   };
+
   if (findPalette(paletteId) === undefined) {
     return <Navigate to="/" replace />;
   }
