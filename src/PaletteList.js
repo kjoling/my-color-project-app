@@ -1,12 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import MiniPalette from "./MiniPalette";
 import { css } from "@emotion/css";
 
 export default function PaletteList(props) {
   const { palettes } = props;
   const paletteIcons = palettes.map((palette) => {
-    return <MiniPalette key={palette.id} {...palette} />;
+    return <MiniPalette {...palette} key={palette.id} />;
   });
   return (
     <div
@@ -51,7 +50,6 @@ const styles = {
     display: "flex",
     alignItems: "flex-start",
     flexFlow: "column wrap",
-    border: "1px solid white",
   },
   nav: {
     display: "flex",
