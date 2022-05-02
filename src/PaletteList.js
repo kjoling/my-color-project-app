@@ -40,30 +40,30 @@ export default function PaletteList(props) {
 
 const styles = {
   root: {
-    "background-color": "blue",
-    height: "100%",
+    backgroundColor: "blue",
+    height: "100vh",
     display: "flex",
-    "align-items": "flex-start",
-    "justify-content": "center",
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   container: {
     width: "50%",
     display: "flex",
-    "align-items": "flex-start",
-    "flex-flow": "column wrap",
+    alignItems: "flex-start",
+    flexFlow: "column wrap",
     border: "1px solid white",
   },
   nav: {
     display: "flex",
     width: "100%",
-    "justify-content": "space-between",
+    justifyContent: "space-between",
     color: "white",
   },
   palettes: {
-    "box-sizing": "border-box",
+    boxSizing: "border-box",
     width: "100%",
     display: "grid",
-    "grid-template-columns": "repeat(3, 30%)",
-    "grid-gap": "5%",
+    gridTemplateColumns: "repeat(3, 30%)",
+    gridGap: "5%",
   },
 };

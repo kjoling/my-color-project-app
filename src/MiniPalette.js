@@ -2,7 +2,18 @@ import React from "react";
 import { css } from "@emotion/css";
 
 export default function MiniPalette(props) {
-  const { paletteName, emoji } = props;
+  const { paletteName, emoji, colors } = props;
+  const miniColorBoxes = colors.map((color) => {
+    return (
+      <div
+        className={css`
+          ${styles.miniColor}
+        `}
+        style={{ backgroundColor: color.color }}
+        key={color.name}
+      ></div>
+    );
+  });
   return (
     <div
       className={css`
@@ -13,7 +24,9 @@ export default function MiniPalette(props) {
         className={css`
           ${styles.colors}
         `}
-      ></div>
+      >
+        {miniColorBoxes}
+      </div>
       <h5
         className={css`
           ${styles.title}
@@ -34,31 +47,44 @@ export default function MiniPalette(props) {
 
 const styles = {
   root: {
-    "background-color": "white",
-    "border-radius": "5px",
+    backgroundColor: "white",
+    borderRadius: "5px",
     border: "1px solid black",
     position: "relative",
     overflow: "hidden",
+    height: "max-content",
     "&:hover": {
       cursor: "pointer",
     },
   },
   colors: {
-    "background-color": "gray",
+    backgroundColor: "#dae1e4",
+    height: "150px",
+    width: "100%",
+    borderRaduis: "5px",
+    overflow: "hidden",
   },
   title: {
     display: "flex",
-    "justify-content": "space-between",
-    "align-items": "center",
+    justifyContent: "space-between",
+    alignItems: "center",
     margin: "0",
     color: "black",
-    "padding-top": "0.5rem",
-    "font-size": "1rem",
+    paddingTop: "0.5rem",
+    fontSize: "1rem",
     position: "relative",
   },
   emoji: {
-    "margin-left": "0.5rem",
-    "font-size": "1.5rem",
+    marginLeft: "0.5rem",
+    fontSize: "1.5rem",
+  },
+  miniColor: {
+    height: "25%",
+    width: "20%",
+    display: "inline-block",
+    margin: "0 auto",
+    position: "relative",
+    marginBottom: "-3.5px",
   },
 };
 // const root = {};
