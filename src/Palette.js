@@ -32,10 +32,10 @@ export default function Palette(props) {
         key={color.id}
         paletteId={palette}
         moreUrl={`/palette/${palette.id}/${color.id}`}
+        showLink={true}
       />
     );
   });
-
   const changeLevel = (newLevel) => {
     setLevel(newLevel);
   };
