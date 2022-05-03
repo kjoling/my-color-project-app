@@ -25,4 +25,5 @@
   justify-content: flex-end;
   align-items: center;
   font-weight: bold;
+  text-transform: capitalize;
 }

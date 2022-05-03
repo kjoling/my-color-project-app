@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import { generatePalette } from "./ColorHelper";
 import ColorBox from "./ColorBox";
 import Navbar from "./Navbar";
+import { css } from "@emotion/css";
 
 export default function SingleColorPalette() {
   const { paletteId, colorId } = useParams();
@@ -50,7 +51,6 @@ export default function SingleColorPalette() {
     setFormat(evt.target.value);
   };
   const colorPalette = getShades(starterPalette, colorId);
-  console.log(colorPalette);
 
   const colorBoxes = colorPalette.map((color) => {
     return (
@@ -70,9 +70,15 @@ export default function SingleColorPalette() {
       <Navbar changeFormat={changeFormat} />
       <div className="Palette-colors">{colorBoxes}</div>
       <footer className="Palette-footer">
-        {paletteId}
+        {colorId}
         <span className="emoji">{starterPalette.emoji}</span>
       </footer>
     </div>
   );
 }
+
+const styles = {
+  footer: {
+    textTransform: "capitalize",
+  },
+};
