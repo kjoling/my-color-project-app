@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import SingleColorPalette from "./SingleColorPalette";
 
 export default function ColorBox(props) {
-  const { name, background, paletteId, id, moreUrl } = props;
+  const { name, background, paletteId, id, moreUrl, showLink } = props;
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     setCopied(true);
@@ -29,13 +29,15 @@ export default function ColorBox(props) {
           </div>
           <button className="copy-button">COPY</button>
         </div>
-        <Link
-          to={moreUrl}
-          onClick={(e) => e.stopPropagation()}
-          element={<SingleColorPalette />}
-        >
-          <span className="see-more">MORE</span>
-        </Link>
+        {showLink && (
+          <Link
+            to={moreUrl}
+            onClick={(e) => e.stopPropagation()}
+            element={<SingleColorPalette />}
+          >
+            <span className="see-more">MORE</span>
+          </Link>
+        )}
       </div>
     </CopyToClipboard>
   );
