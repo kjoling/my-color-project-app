@@ -17,7 +17,6 @@ export default function Palette(props) {
       return palette.id.toLowerCase() === id.toLowerCase();
     });
   };
-
   if (findPalette(paletteId) === undefined) {
     return <Navigate to="/" replace />;
   }
@@ -31,6 +30,8 @@ export default function Palette(props) {
         name={color.name}
         id={color.id}
         key={color.id}
+        paletteId={palette}
+        moreUrl={`/palette/${palette.id}/${color.id}`}
       />
     );
   });

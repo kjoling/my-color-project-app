@@ -106,12 +106,3 @@ const styles = {
 // };
 
 //sample how to add styles
-{
-  /* <div
-className={css`
-  ${styles}
-`}
->
-{paletteName}
-</div> */
-}
