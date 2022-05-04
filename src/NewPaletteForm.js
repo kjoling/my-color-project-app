@@ -11,13 +11,15 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-
+import { v4 as uuidv4 } from "uuid";
 import { ChromePicker } from "react-color";
+import DraggableColorBox from "./DraggableColorBox";
 
 const drawerWidth = 400;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
+    height: "calc(100vh - 215px)",
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
@@ -82,7 +84,7 @@ export default function NewPaletteForm() {
   };
 
   const displayColors = colors.map((color) => {
-    return <li style={{ backgroundColor: color }}>{color}</li>;
+    return <DraggableColorBox color={color} key={uuidv4()} />;
   });
 
   return (
@@ -149,7 +151,7 @@ export default function NewPaletteForm() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <ul>{displayColors}</ul>
+        {displayColors}
       </Main>
     </Box>
   );
