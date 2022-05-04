@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import { generatePalette } from "./ColorHelper";
 import ColorBox from "./ColorBox";
 import Navbar from "./Navbar";
-import { css } from "@emotion/css";
+// import { css } from "@emotion/css";
 import PaletteFooter from "./PaletteFooter";
 
 export default function SingleColorPalette() {
@@ -88,8 +88,8 @@ export default function SingleColorPalette() {
   );
 }
 
-const styles = {
-  footer: {
-    textTransform: "capitalize",
-  },
-};
+// const styles = {
+//   footer: {
+//     textTransform: "capitalize",
+//   },
+// };

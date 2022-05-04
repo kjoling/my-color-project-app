@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import PaletteFooter from "./PaletteFooter";
 
-export default function Palette(props) {
+export default function Palette() {
   const [level, setLevel] = useState(500);
   const [format, setFormat] = useState("hex");
   const { paletteId } = useParams();
@@ -34,6 +34,7 @@ export default function Palette(props) {
         paletteId={palette}
         moreUrl={`/palette/${palette.id}/${color.id}`}
         showLink={true}
+        level={level}
       />
     );
   });
