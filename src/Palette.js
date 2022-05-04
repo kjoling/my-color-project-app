@@ -6,6 +6,7 @@ import seedColors from "./seedColors";
 import { generatePalette } from "./ColorHelper";
 import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import PaletteFooter from "./PaletteFooter";
 
 export default function Palette(props) {
   const [level, setLevel] = useState(500);
@@ -52,10 +53,7 @@ export default function Palette(props) {
         showSlider={true}
       />
       <div className="Palette-colors">{colorBoxes}</div>
-      <footer className="Palette-footer">
-        {palette.paletteName}
-        <span className="emoji">{palette.emoji}</span>
-      </footer>
+      <PaletteFooter palette={palette} multiColorPalette />
     </div>
   );
 }

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import seedColors from "./seedColors";
 import { Navigate } from "react-router-dom";
 import { generatePalette } from "./ColorHelper";
 import ColorBox from "./ColorBox";
 import Navbar from "./Navbar";
 import { css } from "@emotion/css";
+import PaletteFooter from "./PaletteFooter";
 
 export default function SingleColorPalette() {
   const { paletteId, colorId } = useParams();
@@ -66,13 +67,23 @@ export default function SingleColorPalette() {
   });
 
   return (
-    <div className="Palette">
+    <div className="SingleColorPalette Palette">
       <Navbar changeFormat={changeFormat} />
-      <div className="Palette-colors">{colorBoxes}</div>
-      <footer className="Palette-footer">
-        {colorId}
-        <span className="emoji">{starterPalette.emoji}</span>
-      </footer>
+      <div className="Palette-colors">
+        {colorBoxes}
+        <div className="go-back ColorBox">
+          <Link className="back-button" to={`/palette/${paletteId}`}>
+            Go Back
+          </Link>
+        </div>
+      </div>
+
+      <PaletteFooter
+        palette={colorPalette}
+        colorId={colorId}
+        singleColorPalette={true}
+        emoji={starterPalette.emoji}
+      />
     </div>
   );
 }

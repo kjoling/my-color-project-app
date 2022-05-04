@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import SingleColorPalette from "./SingleColorPalette";
 
 export default function ColorBox(props) {
-  const { name, background, paletteId, id, moreUrl, showLink } = props;
+  const { name, background, moreUrl, showLink } = props;
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
     setCopied(true);
