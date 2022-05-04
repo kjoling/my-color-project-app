@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import MiniPalette from "./MiniPalette";
 import { css } from "@emotion/css";
 
@@ -24,6 +25,7 @@ export default function PaletteList(props) {
           `}
         >
           <h1>Palette List!</h1>
+          <Link to="/palette/new">New Palette Form</Link>
         </nav>
         <div
           className={css`
@@ -55,7 +57,19 @@ const styles = {
     display: "flex",
     width: "100%",
     justifyContent: "space-between",
+    alignItems: "center",
     color: "white",
+    "& a": {
+      textDecoration: "none",
+      color: "white",
+      padding: 5,
+      border: "1px solid white",
+      borderRadius: "5px",
+      "&:hover": {
+        color: "black",
+        border: "1px solid black",
+      },
+    },
   },
   palettes: {
     boxSizing: "border-box",

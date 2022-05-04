@@ -4,6 +4,7 @@ import seedColors from "./seedColors";
 import { Routes, Route } from "react-router-dom";
 import PaletteList from "./PaletteList";
 import SingleColorPalette from "./SingleColorPalette";
+import NewPaletteForm from "./NewPaletteForm";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           path="/palette/:paletteId/:colorId"
           element={<SingleColorPalette />}
         />
+        <Route path="/palette/new" element={<NewPaletteForm />} />
       </Routes>
     </div>
   );
