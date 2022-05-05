@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -14,8 +14,15 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { v4 as uuidv4 } from "uuid";
 import { ChromePicker } from "react-color";
 import DraggableColorBox from "./DraggableColorBox";
+import { useForm, Controller } from "react-hook-form";
+import { TextField } from "@mui/material";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const drawerWidth = 400;
+const defaultValues = {
+  colorName: "purple",
+};
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -64,15 +71,36 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function NewPaletteForm() {
+  const validationSchema = Yup.object().shape({
+    colorName: Yup.string()
+      .test("colorNameCheck", "colorNameCheck", (value) => {
+        return colors.every(
+          ({ name }) => name.toLowerCase() !== value.toLowerCase()
+        );
+      })
+      .test("colorCheck", "colorCheck", (value) => {
+        return colors.every(({ color }) => color !== currentColor);
+      }),
+  });
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(validationSchema) }, defaultValues);
+  const [data, setData] = useState(null);
   const [open, setOpen] = React.useState(false);
-  const [currentColor, setCurrentColor] = useState("purple");
+  const [currentColor, setCurrentColor] = useState([]);
   const [colors, setColors] = useState([]);
 
   const changeColor = (newColor) => {
     setCurrentColor(newColor.hex);
   };
-  const addColor = () => {
-    setColors((oldColors) => [...oldColors, currentColor]);
+  const addColor = ({ colorName }) => {
+    const newColor = {
+      color: currentColor,
+      name: colorName,
+    };
+    setColors((oldColors) => [...oldColors, newColor]);
   };
 
   const handleDrawerOpen = () => {
@@ -83,9 +111,14 @@ export default function NewPaletteForm() {
     setOpen(false);
   };
 
-  const displayColors = colors.map((color) => {
-    return <DraggableColorBox color={color} key={uuidv4()} />;
+  const displayColors = colors.map(({ color, name }) => {
+    return <DraggableColorBox color={color} key={uuidv4()} name={name} />;
   });
+
+  const onSubmit = (data) => {
+    setData(data);
+    addColor(data);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -140,14 +173,31 @@ export default function NewPaletteForm() {
           onChange={changeColor}
           disableAlpha
         />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={addColor}
-          style={{ backgroundColor: currentColor }}
-        >
-          Add Color
-        </Button>
+        <form onSubmit={handleSubmit((data) => onSubmit(data))}>
+          <Controller
+            control={control}
+            name="colorName"
+            render={({ field: { onChange, onBlur, value = "", ref } }) => (
+              <div>
+                <TextField
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  required
+                />
+              </div>
+            )}
+          />
+
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ backgroundColor: currentColor }}
+            type="submit"
+          >
+            Add Color
+          </Button>
+        </form>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

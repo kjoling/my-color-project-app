@@ -14,18 +14,15 @@ const styles = {
 };
 
 function DraggableColorBox(props) {
-  const { color } = props;
-
+  const { color, name } = props;
   return (
     <div
       className={css`
         ${styles.root};
         background-color: ${color};
-    
-        }
       `}
     >
-      {color}
+      {name}
     </div>
   );
 }
