@@ -78,10 +78,12 @@ export default function NewPaletteForm() {
           ({ name }) => name.toLowerCase() !== value.toLowerCase()
         );
       })
-      .test("colorCheck", "colorCheck", (value) => {
+      .test("colorCheck", "colorCheck", () => {
         return colors.every(({ color }) => color !== currentColor);
-      }),
+      })
+      .required("Value cannot be blank"),
   });
+
   const {
     handleSubmit,
     control,
@@ -92,6 +94,19 @@ export default function NewPaletteForm() {
   const [currentColor, setCurrentColor] = useState([]);
   const [colors, setColors] = useState([]);
 
+  let message;
+  if (
+    Object.keys(errors).length &&
+    errors.colorName.message === "colorNameCheck"
+  ) {
+    message = "Invalid color name - already in use.";
+    // setIsValidSubmit(false);
+  }
+  if (Object.keys(errors).length && errors.colorName.message === "colorCheck") {
+    message = "Invalid color - color already in use.";
+    // setIsValidSubmit(false);
+  }
+
   const changeColor = (newColor) => {
     setCurrentColor(newColor.hex);
   };
@@ -101,6 +116,8 @@ export default function NewPaletteForm() {
       name: colorName,
     };
     setColors((oldColors) => [...oldColors, newColor]);
+    setCurrentColor("");
+    setData("");
   };
 
   const handleDrawerOpen = () => {
@@ -116,7 +133,7 @@ export default function NewPaletteForm() {
   });
 
   const onSubmit = (data) => {
-    setData(data);
+    // setData(data);
     addColor(data);
   };
 
@@ -177,7 +194,7 @@ export default function NewPaletteForm() {
           <Controller
             control={control}
             name="colorName"
-            render={({ field: { onChange, onBlur, value = "", ref } }) => (
+            render={({ field: { onChange, onBlur, value = "" } }) => (
               <div>
                 <TextField
                   onChange={onChange}
@@ -188,7 +205,7 @@ export default function NewPaletteForm() {
               </div>
             )}
           />
-
+          {Object.keys(errors) ? <div >{message}</div> : null}
           <Button
             variant="contained"
             color="primary"
