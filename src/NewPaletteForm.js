@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -18,6 +18,7 @@ import { useForm, Controller } from "react-hook-form";
 import { TextField } from "@mui/material";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 400;
 const defaultValues = {
@@ -70,7 +71,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function NewPaletteForm() {
+export default function NewPaletteForm(props) {
   const validationSchema = Yup.object().shape({
     colorName: Yup.string()
       .test("colorNameCheck", "colorNameCheck", (value) => {
@@ -93,6 +94,7 @@ export default function NewPaletteForm() {
   const [open, setOpen] = React.useState(false);
   const [currentColor, setCurrentColor] = useState([]);
   const [colors, setColors] = useState([]);
+  const navigate = useNavigate();
 
   let message;
   if (
@@ -100,11 +102,9 @@ export default function NewPaletteForm() {
     errors.colorName.message === "colorNameCheck"
   ) {
     message = "Invalid color name - already in use.";
-    // setIsValidSubmit(false);
   }
   if (Object.keys(errors).length && errors.colorName.message === "colorCheck") {
     message = "Invalid color - color already in use.";
-    // setIsValidSubmit(false);
   }
 
   const changeColor = (newColor) => {
@@ -133,14 +133,25 @@ export default function NewPaletteForm() {
   });
 
   const onSubmit = (data) => {
-    // setData(data);
     addColor(data);
+  };
+
+  const savePalette = () => {
+    let newName = "New test palette";
+
+    const newPalette = {
+      paletteName: "New Test Palette",
+      colors: colors,
+      id: "new-test-palette",
+    };
+    props.saveNewPalette(newPalette);
+    navigate("/");
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} color="default">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -154,6 +165,9 @@ export default function NewPaletteForm() {
           <Typography variant="h6" noWrap component="div">
             Persistent drawer
           </Typography>
+          <Button variant="contained" color="primary" onClick={savePalette}>
+            Save New Palette!
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -205,7 +219,7 @@ export default function NewPaletteForm() {
               </div>
             )}
           />
-          {Object.keys(errors) ? <div >{message}</div> : null}
+          {Object.keys(errors) ? <div>{message}</div> : null}
           <Button
             variant="contained"
             color="primary"

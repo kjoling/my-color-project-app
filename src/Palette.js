@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import ColorBox from "./ColorBox";
 import "./Palette.css";
 import Navbar from "./Navbar";
-import seedColors from "./seedColors";
 import { generatePalette } from "./ColorHelper";
 import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import PaletteFooter from "./PaletteFooter";
 
-export default function Palette() {
+export default function Palette(props) {
+  const { palettes } = props;
   const [level, setLevel] = useState(500);
   const [format, setFormat] = useState("hex");
   const { paletteId } = useParams();
 
   const findPalette = (id) => {
-    return seedColors.find(function (palette) {
+    return palettes.find(function (palette) {
       return palette.id.toLowerCase() === id.toLowerCase();
     });
   };
