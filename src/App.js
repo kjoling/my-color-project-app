@@ -23,7 +23,7 @@ function App() {
         />
         <Route
           path="/palette/new"
-          element={<NewPaletteForm saveNewPalette={savePalette} />}
+          element={<NewPaletteForm saveNewPalette={savePalette} palettes={palette}/>}
         />
       </Routes>
     </div>

@@ -19,6 +19,7 @@ import { TextField } from "@mui/material";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+import { css } from "@emotion/css";
 
 const drawerWidth = 400;
 const defaultValues = {
@@ -72,40 +73,55 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function NewPaletteForm(props) {
-  const validationSchema = Yup.object().shape({
+  //color name and submission validation:
+  const colorNameValidationSchema = Yup.object().shape({
     colorName: Yup.string()
-      .test("colorNameCheck", "colorNameCheck", (value) => {
+      .test("colorNameCheck", "Name is already taken", (value) => {
         return colors.every(
           ({ name }) => name.toLowerCase() !== value.toLowerCase()
         );
       })
-      .test("colorCheck", "colorCheck", () => {
+      .test("colorCheck", "Color is already taken", () => {
         return colors.every(({ color }) => color !== currentColor);
+      })
+      .required("Value cannot be blank"),
+  });
+  const paletteNameValidationSchema = Yup.object().shape({
+    saveNewPalette: Yup.string()
+      .test("paletteNameCheck", "Name is already taken", (value) => {
+        return palettes.every(
+          ({ paletteName }) => paletteName.toLowerCase() !== value.toLowerCase()
+        );
       })
       .required("Value cannot be blank"),
   });
 
   const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(validationSchema) }, defaultValues);
-  const [data, setData] = useState(null);
+    handleSubmit: handleColorNameSubmit,
+    control: controlColorName,
+    formState: { errors: errorsColorName },
+  } = useForm(
+    { resolver: yupResolver(colorNameValidationSchema) },
+    defaultValues
+  );
+  const {
+    handleSubmit: handlePaletteNameSubmit,
+    control: controlPaletteName,
+    formState: { errors: errorsPaletteName },
+  } = useForm(
+    { resolver: yupResolver(paletteNameValidationSchema) },
+    defaultValues
+  );
+  //state and props
+  const { palettes } = props;
+  console.log(palettes);
   const [open, setOpen] = React.useState(false);
   const [currentColor, setCurrentColor] = useState([]);
   const [colors, setColors] = useState([]);
   const navigate = useNavigate();
 
-  let message;
-  if (
-    Object.keys(errors).length &&
-    errors.colorName.message === "colorNameCheck"
-  ) {
-    message = "Invalid color name - already in use.";
-  }
-  if (Object.keys(errors).length && errors.colorName.message === "colorCheck") {
-    message = "Invalid color - color already in use.";
-  }
+  console.log(errorsColorName);
+  console.log(errorsPaletteName);
 
   const changeColor = (newColor) => {
     setCurrentColor(newColor.hex);
@@ -117,7 +133,6 @@ export default function NewPaletteForm(props) {
     };
     setColors((oldColors) => [...oldColors, newColor]);
     setCurrentColor("");
-    setData("");
   };
 
   const handleDrawerOpen = () => {
@@ -136,13 +151,14 @@ export default function NewPaletteForm(props) {
     addColor(data);
   };
 
-  const savePalette = () => {
-    let newName = "New test palette";
+  const savePalette = (data) => {
+    const newPaletteName = data.saveNewPalette;
+    console.log(data);
 
     const newPalette = {
-      paletteName: "New Test Palette",
+      paletteName: newPaletteName,
       colors: colors,
-      id: "new-test-palette",
+      id: newPaletteName.replace(/ /g, "-"),
     };
     props.saveNewPalette(newPalette);
     navigate("/");
@@ -165,9 +181,34 @@ export default function NewPaletteForm(props) {
           <Typography variant="h6" noWrap component="div">
             Persistent drawer
           </Typography>
-          <Button variant="contained" color="primary" onClick={savePalette}>
-            Save New Palette!
-          </Button>
+          <form onSubmit={handlePaletteNameSubmit((data) => savePalette(data))}>
+            <Controller
+              control={controlPaletteName}
+              name="saveNewPalette"
+              render={({ field: { onChange, onBlur, value = "" } }) => (
+                <div>
+                  <TextField
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    required
+                  />
+                </div>
+              )}
+            />
+            <Button variant="contained" color="primary" type="submit">
+              Save New Palette!
+            </Button>
+          </form>
+          {Object.keys(errorsPaletteName).length !== 0 ? (
+            <div
+              className={css`
+                ${styles.error}
+              `}
+            >
+              {errorsPaletteName?.saveNewPalette.message}
+            </div>
+          ) : null}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -204,9 +245,9 @@ export default function NewPaletteForm(props) {
           onChange={changeColor}
           disableAlpha
         />
-        <form onSubmit={handleSubmit((data) => onSubmit(data))}>
+        <form onSubmit={handleColorNameSubmit((data) => onSubmit(data))}>
           <Controller
-            control={control}
+            control={controlColorName}
             name="colorName"
             render={({ field: { onChange, onBlur, value = "" } }) => (
               <div>
@@ -219,7 +260,15 @@ export default function NewPaletteForm(props) {
               </div>
             )}
           />
-          {Object.keys(errors) ? <div>{message}</div> : null}
+          {Object.keys(errorsColorName).length !== 0 ? (
+            <div
+              className={css`
+                ${styles.error}
+              `}
+            >
+              {errorsColorName?.colorName.message}
+            </div>
+          ) : null}
           <Button
             variant="contained"
             color="primary"
@@ -237,3 +286,10 @@ export default function NewPaletteForm(props) {
     </Box>
   );
 }
+
+const styles = {
+  error: {
+    color: "red",
+    fontStyle: "italic",
+  },
+};
