@@ -1,8 +1,8 @@
 import React from "react";
 import { css } from "@emotion/css";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ContentCutOutlined } from "@mui/icons-material";
-
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 const styles = {
   root: {
     width: "25%",
@@ -29,6 +29,7 @@ const styles = {
   deleteIcon: {
     color: "rgba(0,0,0,.5)",
     transition: "all 0.15s ease-in-out",
+    zIndex: "3",
     "&:hover": {
       color: "white",
       transform: "scale(1.3)",
@@ -37,9 +38,21 @@ const styles = {
 };
 
 function DraggableColorBox(props) {
-  const { color, name, handleClick } = props;
+  const { color, name, handleClick, id } = props;
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
     <div
+      {...attributes}
+      {...listeners}
+      ref={setNodeRef}
+      style={style}
       className={css`
         ${styles.root};
         background-color: ${color};

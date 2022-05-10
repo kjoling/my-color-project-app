@@ -33,6 +33,7 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
+  rectSwappingStrategy,
 } from "@dnd-kit/sortable";
 
 const drawerWidth = 400;
@@ -137,7 +138,11 @@ export default function NewPaletteForm(props) {
   const [colors, setColors] = useState([]);
   const navigate = useNavigate();
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -163,6 +168,7 @@ export default function NewPaletteForm(props) {
     setOpen(false);
   };
   const deleteColor = (colorName) => {
+    console.log("Deleted?");
     setColors(
       colors.filter((color) => {
         return color.name.toLowerCase() !== colorName.toLowerCase();
@@ -188,7 +194,6 @@ export default function NewPaletteForm(props) {
 
   const savePalette = (data) => {
     const newPaletteName = data.saveNewPalette;
-    console.log(data);
 
     const newPalette = {
       paletteName: newPaletteName,
@@ -203,8 +208,9 @@ export default function NewPaletteForm(props) {
 
     if (active.id !== over.id) {
       setColors((colors) => {
-        const oldIndex = colors.indexOf(active.id);
-        const newIndex = colors.indexOf(over.id);
+        const oldIndex = colors.findIndex((color) => color.name === active.id);
+        const newIndex = colors.findIndex((color) => color.name === over.id);
+        return arrayMove(colors, oldIndex, newIndex);
       });
     }
   }
@@ -329,9 +335,16 @@ export default function NewPaletteForm(props) {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
+          onDragEnd={(event) => handleDragEnd(event)}
         >
-          <SortableContext items={colors}>{displayColors}</SortableContext>
+          <SortableContext
+            items={colors.map((color) => {
+              return color.name;
+            })}
+            strategy={rectSwappingStrategy}
+          >
+            {displayColors}
+          </SortableContext>
         </DndContext>
       </Main>
     </Box>
