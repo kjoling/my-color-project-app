@@ -1,6 +1,7 @@
 import React from "react";
 import { css } from "@emotion/css";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { ContentCutOutlined } from "@mui/icons-material";
 
 const styles = {
   root: {
@@ -36,7 +37,7 @@ const styles = {
 };
 
 function DraggableColorBox(props) {
-  const { color, name } = props;
+  const { color, name, handleClick } = props;
   return (
     <div
       className={css`
@@ -55,7 +56,7 @@ function DraggableColorBox(props) {
             ${styles.deleteIcon}
           `}
         >
-          <DeleteIcon />
+          <DeleteIcon onClick={() => handleClick(name)} />
         </span>
       </div>
     </div>

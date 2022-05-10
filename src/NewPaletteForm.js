@@ -114,14 +114,10 @@ export default function NewPaletteForm(props) {
   );
   //state and props
   const { palettes } = props;
-  console.log(palettes);
   const [open, setOpen] = React.useState(false);
   const [currentColor, setCurrentColor] = useState([]);
   const [colors, setColors] = useState([]);
   const navigate = useNavigate();
-
-  console.log(errorsColorName);
-  console.log(errorsPaletteName);
 
   const changeColor = (newColor) => {
     setCurrentColor(newColor.hex);
@@ -142,9 +138,24 @@ export default function NewPaletteForm(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const deleteColor = (colorName) => {
+    setColors(
+      colors.filter((color) => {
+        console.log(color.name);
+        return color.name.toLowerCase() !== colorName.toLowerCase();
+      })
+    );
+  };
 
   const displayColors = colors.map(({ color, name }) => {
-    return <DraggableColorBox color={color} key={uuidv4()} name={name} />;
+    return (
+      <DraggableColorBox
+        color={color}
+        key={uuidv4()}
+        name={name}
+        handleClick={deleteColor}
+      />
+    );
   });
 
   const onSubmit = (data) => {

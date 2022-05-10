@@ -12,18 +12,24 @@ function App() {
   const savePalette = (newPalette) => {
     setPalette((currentPalettes) => [...currentPalettes, newPalette]);
   };
+
   return (
     <div>
       <Routes>
         <Route path="*" element={<PaletteList palettes={palette} />} />
-        <Route path="/palette/:paletteId" element={<Palette palettes={palette} />} />
+        <Route
+          path="/palette/:paletteId"
+          element={<Palette palettes={palette} />}
+        />
         <Route
           path="/palette/:paletteId/:colorId"
           element={<SingleColorPalette />}
         />
         <Route
           path="/palette/new"
-          element={<NewPaletteForm saveNewPalette={savePalette} palettes={palette}/>}
+          element={
+            <NewPaletteForm saveNewPalette={savePalette} palettes={palette} />
+          }
         />
       </Routes>
     </div>
