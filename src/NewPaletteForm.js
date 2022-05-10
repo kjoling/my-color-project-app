@@ -20,6 +20,20 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { css } from "@emotion/css";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 const drawerWidth = 400;
 const defaultValues = {
@@ -93,7 +107,11 @@ export default function NewPaletteForm(props) {
           ({ paletteName }) => paletteName.toLowerCase() !== value.toLowerCase()
         );
       })
-      .required("Value cannot be blank"),
+      .required("Value cannot be blank")
+      .test("colorsCheck", "Must choose at least 1 color to save!", () => {
+        console.log(colors);
+        return colors.length !== 0;
+      }),
   });
 
   const {
@@ -118,6 +136,12 @@ export default function NewPaletteForm(props) {
   const [currentColor, setCurrentColor] = useState([]);
   const [colors, setColors] = useState([]);
   const navigate = useNavigate();
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const changeColor = (newColor) => {
     setCurrentColor(newColor.hex);
@@ -141,7 +165,6 @@ export default function NewPaletteForm(props) {
   const deleteColor = (colorName) => {
     setColors(
       colors.filter((color) => {
-        console.log(color.name);
         return color.name.toLowerCase() !== colorName.toLowerCase();
       })
     );
@@ -154,6 +177,7 @@ export default function NewPaletteForm(props) {
         key={uuidv4()}
         name={name}
         handleClick={deleteColor}
+        id={name}
       />
     );
   });
@@ -174,6 +198,16 @@ export default function NewPaletteForm(props) {
     props.saveNewPalette(newPalette);
     navigate("/");
   };
+  function handleDragEnd(event) {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      setColors((colors) => {
+        const oldIndex = colors.indexOf(active.id);
+        const newIndex = colors.indexOf(over.id);
+      });
+    }
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -292,7 +326,13 @@ export default function NewPaletteForm(props) {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        {displayColors}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext items={colors}>{displayColors}</SortableContext>
+        </DndContext>
       </Main>
     </Box>
   );
