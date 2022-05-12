@@ -87,6 +87,10 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
+NewPaletteForm.defaultProps = {
+  maxColors: 20,
+};
+
 export default function NewPaletteForm(props) {
   //color name and submission validation:
   const colorNameValidationSchema = Yup.object().shape({
@@ -132,10 +136,10 @@ export default function NewPaletteForm(props) {
     defaultValues
   );
   //state and props
-  const { palettes } = props;
+  const { palettes, maxColors } = props;
   const [open, setOpen] = React.useState(false);
   const [currentColor, setCurrentColor] = useState([]);
-  const [colors, setColors] = useState([]);
+  const [colors, setColors] = useState(palettes[0].colors);
   const navigate = useNavigate();
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -147,6 +151,17 @@ export default function NewPaletteForm(props) {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  const clearColors = () => {
+    setColors([]);
+  };
+  const addRandomColor = () => {
+    //pick random color from all palettes that are currently stored
+    const allColors = palettes.map((palette) => palette.colors).flat();
+    console.log(allColors);
+    const rand = Math.floor(Math.random() * allColors.length);
+    setColors((oldColors) => [...oldColors, allColors[rand]]);
+  };
 
   const changeColor = (newColor) => {
     setCurrentColor(newColor.hex);
@@ -230,7 +245,7 @@ export default function NewPaletteForm(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            Create Your Own Color Palette:
           </Typography>
           <form onSubmit={handlePaletteNameSubmit((data) => savePalette(data))}>
             <Controller
@@ -283,11 +298,16 @@ export default function NewPaletteForm(props) {
         <Divider />
         <Typography variant="h4">Design your paellte!</Typography>
         <div>
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" onClick={clearColors}>
             Clear Palette
           </Button>
-          <Button variant="contained" color="primary">
-            Random Color
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={addRandomColor}
+            disabled={colors.length >= maxColors}
+          >
+            {colors.length >= maxColors ? "Palette full!" : "Add Random Color"}{" "}
           </Button>
         </div>
         <ChromePicker
@@ -325,8 +345,9 @@ export default function NewPaletteForm(props) {
             color="primary"
             style={{ backgroundColor: currentColor }}
             type="submit"
+            disabled={colors.length >= maxColors}
           >
-            Add Color
+            {colors.length >= maxColors ? "Palette full!" : "Add Color"}
           </Button>
         </form>
       </Drawer>
