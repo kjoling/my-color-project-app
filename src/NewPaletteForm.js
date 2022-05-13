@@ -18,7 +18,7 @@ import { useForm, Controller } from "react-hook-form";
 import { TextField } from "@mui/material";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { css } from "@emotion/css";
 import {
   DndContext,
@@ -35,6 +35,7 @@ import {
   verticalListSortingStrategy,
   rectSwappingStrategy,
 } from "@dnd-kit/sortable";
+import { NoEncryption } from "@mui/icons-material";
 
 const drawerWidth = 400;
 const defaultValues = {
@@ -275,6 +276,18 @@ export default function NewPaletteForm(props) {
               {errorsPaletteName?.saveNewPalette.message}
             </div>
           ) : null}
+          <div>
+            <Link
+              to="/"
+              className={css`
+                ${styles.link}
+              `}
+            >
+              <Button variant="contained" color="secondary">
+                Go back!
+              </Button>
+            </Link>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -376,5 +389,8 @@ const styles = {
   error: {
     color: "red",
     fontStyle: "italic",
+  },
+  link: {
+    textDecoration: "none",
   },
 };
