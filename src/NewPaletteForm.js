@@ -2,21 +2,15 @@ import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
 import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import LensBlurIcon from "@mui/icons-material/LensBlur";
 import { v4 as uuidv4 } from "uuid";
-import { ChromePicker } from "react-color";
 import DraggableColorBox from "./DraggableColorBox";
-import { useForm, Controller } from "react-hook-form";
-import { TextField } from "@mui/material";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
-import { css } from "@emotion/css";
 import {
   DndContext,
   closestCenter,
@@ -32,6 +26,7 @@ import {
   rectSwappingStrategy,
 } from "@dnd-kit/sortable";
 import PaletteFormNav from "./PaletteFormNav";
+import ColorPickerForm from "./ColorPickerForm";
 
 const drawerWidth = 400;
 const defaultValues = {
@@ -72,33 +67,19 @@ NewPaletteForm.defaultProps = {
 };
 
 export default function NewPaletteForm(props) {
-  //color name and submission validation:
-  const colorNameValidationSchema = Yup.object().shape({
-    colorName: Yup.string()
-      .test("colorNameCheck", "Name is already taken", (value) => {
-        return colors.every(
-          ({ name }) => name.toLowerCase() !== value.toLowerCase()
-        );
-      })
-      .test("colorCheck", "Color is already taken", () => {
-        return colors.every(({ color }) => color !== currentColor);
-      })
-      .required("Value cannot be blank"),
-  });
-
-  const {
-    handleSubmit: handleColorNameSubmit,
-    control: controlColorName,
-    formState: { errors: errorsColorName },
-  } = useForm(
-    { resolver: yupResolver(colorNameValidationSchema) },
-    defaultValues
-  );
-
   //state and props
   const { palettes, maxColors } = props;
   const [open, setOpen] = React.useState(false);
-  const [currentColor, setCurrentColor] = useState([]);
+
+  const getRandomColor = () => {
+    const allColors = palettes.map((palette) => palette.colors).flat();
+    const rand = Math.floor(Math.random() * allColors.length);
+    return allColors[rand];
+  };
+
+  const randColor = getRandomColor().color;
+
+  const [currentColor, setCurrentColor] = useState(randColor);
   const [colors, setColors] = useState(palettes[0].colors);
   const navigate = useNavigate();
   const sensors = useSensors(
@@ -115,12 +96,12 @@ export default function NewPaletteForm(props) {
   const clearColors = () => {
     setColors([]);
   };
+
   const addRandomColor = () => {
     //pick random color from all palettes that are currently stored
-    const allColors = palettes.map((palette) => palette.colors).flat();
-    console.log(allColors);
-    const rand = Math.floor(Math.random() * allColors.length);
-    setColors((oldColors) => [...oldColors, allColors[rand]]);
+    const randomColor = getRandomColor();
+    setColors((oldColors) => [...oldColors, randomColor]);
+    setCurrentColor(randomColor.color);
   };
 
   const changeColor = (newColor) => {
@@ -132,7 +113,6 @@ export default function NewPaletteForm(props) {
       name: colorName,
     };
     setColors((oldColors) => [...oldColors, newColor]);
-    setCurrentColor("");
   };
 
   const handleDrawerOpen = () => {
@@ -165,6 +145,7 @@ export default function NewPaletteForm(props) {
 
   const onSubmit = (data) => {
     addColor(data);
+    console.log(data);
   };
 
   const savePalette = (data) => {
@@ -233,46 +214,28 @@ export default function NewPaletteForm(props) {
             {colors.length >= maxColors ? "Palette full!" : "Add Random Color"}{" "}
           </Button>
         </div>
-        <ChromePicker
-          color={currentColor}
-          onChangeComplete={(newColor) => changeColor(newColor)}
-          onChange={changeColor}
-          disableAlpha
+        <ColorPickerForm
+          colors={colors}
+          currentColor={currentColor}
+          defaultValues={defaultValues}
+          changeColor={changeColor}
+          onSubmit={onSubmit}
+          maxColors={maxColors}
         />
-        <form onSubmit={handleColorNameSubmit((data) => onSubmit(data))}>
-          <Controller
-            control={controlColorName}
-            name="colorName"
-            render={({ field: { onChange, onBlur, value = "" } }) => (
-              <div>
-                <TextField
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  required
-                />
-              </div>
-            )}
-          />
-          {Object.keys(errorsColorName).length !== 0 ? (
-            <div
-              className={css`
-                ${styles.error}
-              `}
-            >
-              {errorsColorName?.colorName.message}
-            </div>
-          ) : null}
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ backgroundColor: currentColor }}
-            type="submit"
-            disabled={colors.length >= maxColors}
-          >
-            {colors.length >= maxColors ? "Palette full!" : "Add Color"}
-          </Button>
-        </form>
+
+        <LensBlurIcon
+          sx={{
+            color: currentColor,
+            fontSize: 200,
+            width: "50%",
+            height: "25%",
+            margin: "0 auto",
+            display: "inline-block",
+            position: "relative",
+            marginBottom: "-3.5px",
+            marginTop: "5px",
+          }}
+        />
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
@@ -294,13 +257,3 @@ export default function NewPaletteForm(props) {
     </Box>
   );
 }
-
-const styles = {
-  error: {
-    color: "red",
-    fontStyle: "italic",
-  },
-  link: {
-    textDecoration: "none",
-  },
-};
