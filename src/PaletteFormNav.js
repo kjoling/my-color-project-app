@@ -26,6 +26,9 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  flexDirection: "row",
+  justifyContent: "space-between",
+  height: "64px",
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
@@ -63,7 +66,11 @@ export default function PaletteFormNav(props) {
   );
 
   return (
-    <div>
+    <div
+      className={css`
+        ${styles.root}
+      `}
+    >
       <CssBaseline />
       <AppBar position="fixed" open={open} color="default">
         <Toolbar>
@@ -79,6 +86,12 @@ export default function PaletteFormNav(props) {
           <Typography variant="h6" noWrap component="div">
             Create Your Own Color Palette:
           </Typography>
+        </Toolbar>
+        <div
+          className={css`
+            ${styles.navBtns}
+          `}
+        >
           <form onSubmit={handlePaletteNameSubmit((data) => savePalette(data))}>
             <Controller
               control={controlPaletteName}
@@ -90,6 +103,7 @@ export default function PaletteFormNav(props) {
                     onBlur={onBlur}
                     value={value}
                     required
+                    placeholder="Palette Name"
                   />
                 </div>
               )}
@@ -119,13 +133,16 @@ export default function PaletteFormNav(props) {
               </Button>
             </Link>
           </div>
-        </Toolbar>
+        </div>
       </AppBar>
     </div>
   );
 }
 
 const styles = {
+  root: {
+    display: "flex",
+  },
   error: {
     color: "red",
     fontStyle: "italic",
@@ -133,4 +150,5 @@ const styles = {
   link: {
     textDecoration: "none",
   },
+  navBtns: {},
 };
