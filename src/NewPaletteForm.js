@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
+import PaletteFormNav from "./PaletteFormNav";
+import ColorPickerForm from "./ColorPickerForm";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import { Button } from "@mui/material";
@@ -11,6 +13,7 @@ import LensBlurIcon from "@mui/icons-material/LensBlur";
 import { v4 as uuidv4 } from "uuid";
 import DraggableColorBox from "./DraggableColorBox";
 import { useNavigate } from "react-router-dom";
+import { css } from "@emotion/css";
 import {
   DndContext,
   closestCenter,
@@ -25,8 +28,6 @@ import {
   sortableKeyboardCoordinates,
   rectSwappingStrategy,
 } from "@dnd-kit/sortable";
-import PaletteFormNav from "./PaletteFormNav";
-import ColorPickerForm from "./ColorPickerForm";
 
 const drawerWidth = 400;
 const defaultValues = {
@@ -188,6 +189,8 @@ export default function NewPaletteForm(props) {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
+            // display: "flex",
+            // alignItems: "center",
           },
         }}
         variant="persistent"
@@ -200,42 +203,67 @@ export default function NewPaletteForm(props) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <Typography variant="h4">Design your paellte!</Typography>
-        <div>
-          <Button variant="contained" color="secondary" onClick={clearColors}>
-            Clear Palette
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={addRandomColor}
-            disabled={colors.length >= maxColors}
+        <div
+          className={css`
+            ${styles.container}
+          `}
+        >
+          <Typography variant="h4" gutterBottom>
+            Design your paellte!
+          </Typography>
+          <div
+            className={css`
+              ${styles.buttons}
+            `}
           >
-            {colors.length >= maxColors ? "Palette full!" : "Add Random Color"}{" "}
-          </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={clearColors}
+              className={css`
+                ${styles.button}
+              `}
+            >
+              Clear Palette
+            </Button>
+            <Button
+              className={css`
+                ${styles.button}
+              `}
+              variant="contained"
+              color="primary"
+              onClick={addRandomColor}
+              disabled={colors.length >= maxColors}
+            >
+              {colors.length >= maxColors
+                ? "Palette full!"
+                : "Add Random Color"}{" "}
+            </Button>
+          </div>
+          <ColorPickerForm
+            colors={colors}
+            currentColor={currentColor}
+            defaultValues={defaultValues}
+            changeColor={changeColor}
+            onSubmit={onSubmit}
+            maxColors={maxColors}
+          />
+          {colors.length < 20 ? (
+            <LensBlurIcon
+              sx={{
+                color: currentColor,
+                fontSize: 200,
+                width: "50%",
+                height: "25%",
+                margin: "0 auto",
+                display: "inline-block",
+                position: "relative",
+                marginBottom: "-3.5px",
+                marginTop: "5px",
+              }}
+            />
+          ) : undefined}
         </div>
-        <ColorPickerForm
-          colors={colors}
-          currentColor={currentColor}
-          defaultValues={defaultValues}
-          changeColor={changeColor}
-          onSubmit={onSubmit}
-          maxColors={maxColors}
-        />
-
-        <LensBlurIcon
-          sx={{
-            color: currentColor,
-            fontSize: 200,
-            width: "50%",
-            height: "25%",
-            margin: "0 auto",
-            display: "inline-block",
-            position: "relative",
-            marginBottom: "-3.5px",
-            marginTop: "5px",
-          }}
-        />
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
@@ -257,3 +285,17 @@ export default function NewPaletteForm(props) {
     </Box>
   );
 }
+
+const styles = {
+  buttons: { width: "100%" },
+  button: { width: "50%" },
+  container: {
+    alignSelf: "center",
+    width: "90%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+  },
+};

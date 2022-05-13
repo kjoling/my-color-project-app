@@ -47,26 +47,36 @@ export default function ColorPickerForm(props) {
   const btnText = <div>{disabled ? "Palette full!" : "Add Color"}</div>;
 
   return (
-    <div>
+    <div
+      className={css`
+        ${styles.root}
+      `}
+    >
       <ChromePicker
         color={currentColor}
         onChangeComplete={(newColor) => changeColor(newColor)}
         onChange={changeColor}
         disableAlpha
+        className={css`
+          ${styles.picker}
+        `}
       />
       <form onSubmit={handleColorNameSubmit((data) => onSubmit(data))}>
         <Controller
           control={controlColorName}
           name="colorName"
           render={({ field: { onChange, onBlur, value = "" } }) => (
-            <div>
-              <TextField
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value}
-                required
-              />
-            </div>
+            <TextField
+              placeholder="Color Name"
+              onChange={onChange}
+              onBlur={onBlur}
+              value={value}
+              variant="filled"
+              required
+              className={css`
+                ${styles.colorName}
+              `}
+            />
           )}
         />
         {Object.keys(errorsColorName).length !== 0 ? (
@@ -88,6 +98,9 @@ export default function ColorPickerForm(props) {
           }
           type="submit"
           disabled={disabled}
+          className={css`
+            ${styles.addColor}
+          `}
         >
           {btnText}
         </Button>
@@ -97,11 +110,34 @@ export default function ColorPickerForm(props) {
 }
 
 const styles = {
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   error: {
     color: "red",
     fontStyle: "italic",
   },
   link: {
     textDecoration: "none",
+  },
+  picker: {
+    width: "100% !important",
+    marginTop: "2rem",
+    marginBottom: "1rem",
+  },
+  addColor: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    padding: "1rem !important",
+    marginTop: "1rem !important",
+  },
+  colorName: {
+    width: "100% !important",
+    height: "70px",
   },
 };

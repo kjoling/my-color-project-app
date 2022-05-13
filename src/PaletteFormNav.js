@@ -102,6 +102,7 @@ export default function PaletteFormNav(props) {
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
+                    variant="filled"
                     required
                     placeholder="Palette Name"
                   />
