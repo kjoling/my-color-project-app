@@ -8,12 +8,9 @@ import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useForm, Controller } from "react-hook-form";
-import { TextField } from "@mui/material";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/css";
+import { CenterFocusStrong } from "@mui/icons-material";
 
 const drawerWidth = 400;
 
@@ -27,6 +24,7 @@ const AppBar = styled(MuiAppBar, {
   flexDirection: "row",
   justifyContent: "space-between",
   height: "64px",
+  alignItems: "center",
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
@@ -39,6 +37,11 @@ const AppBar = styled(MuiAppBar, {
 
 export default function PaletteFormNav(props) {
   const { palettes, open, handleDrawerOpen, savePalette, colors } = props;
+  const [formShowing, setFormShowing] = useState(false);
+
+  const showForm = () => {
+    setFormShowing(!formShowing);
+  };
 
   return (
     <div
@@ -67,25 +70,30 @@ export default function PaletteFormNav(props) {
             ${styles.navBtns}
           `}
         >
-          <PaletteMetaForm
-            palettes={palettes}
-            savePalette={savePalette}
-            colors={colors}
-          />
-          <div>
-            <Link
-              to="/"
-              className={css`
-                ${styles.link}
-              `}
-            >
-              <Button variant="contained" color="secondary">
-                Go back!
-              </Button>
-            </Link>
-          </div>
+          <Button variant="contained" onClick={showForm} sx={styles.button}>
+            Save New Palette
+          </Button>
+
+          <Link
+            to="/"
+            className={css`
+              ${styles.link}
+            `}
+          >
+            <Button variant="contained" color="secondary" sx={styles.button}>
+              Go back!
+            </Button>
+          </Link>
         </div>
       </AppBar>
+      {formShowing && (
+        <PaletteMetaForm
+          palettes={palettes}
+          savePalette={savePalette}
+          colors={colors}
+          showForm={showForm}
+        />
+      )}
     </div>
   );
 }
@@ -101,5 +109,10 @@ const styles = {
   link: {
     textDecoration: "none",
   },
-  navBtns: {},
+  navBtns: {
+    marginRight: "1rem",
+  },
+  button: {
+    margin: "auto 0.5rem",
+  },
 };

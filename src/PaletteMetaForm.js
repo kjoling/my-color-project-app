@@ -16,8 +16,8 @@ const defaultValues = {
 };
 
 export default function PaletteMetaForm(props) {
-  const [open, setOpen] = React.useState(false);
-  const { palettes, savePalette, colors } = props;
+  const [open, setOpen] = React.useState(true);
+  const { palettes, savePalette, colors, showForm } = props;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,6 +25,7 @@ export default function PaletteMetaForm(props) {
 
   const handleClose = () => {
     setOpen(false);
+    showForm(false);
   };
 
   const paletteNameValidationSchema = Yup.object().shape({
@@ -52,16 +53,13 @@ export default function PaletteMetaForm(props) {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleClickOpen}>
-        Save New Palette
-      </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please enter a name for your new color palette!
-          </DialogContentText>
-          <form onSubmit={handlePaletteNameSubmit((data) => savePalette(data))}>
+        <DialogTitle>Save New Palette</DialogTitle>
+        <form onSubmit={handlePaletteNameSubmit((data) => savePalette(data))}>
+          <DialogContent>
+            <DialogContentText>
+              Please enter a name for your new color palette!
+            </DialogContentText>
             <Controller
               control={controlPaletteName}
               name="saveNewPalette"
@@ -73,29 +71,30 @@ export default function PaletteMetaForm(props) {
                     value={value}
                     variant="filled"
                     required
+                    fullWidth
+                    margin="normal"
                     placeholder="Palette Name"
                   />
                 </div>
               )}
             />
+            {Object.keys(errorsPaletteName).length !== 0 ? (
+              <div
+                className={css`
+                  ${styles.error}
+                `}
+              >
+                {errorsPaletteName?.saveNewPalette.message}
+              </div>
+            ) : null}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
             <Button variant="contained" color="primary" type="submit">
               Save New Palette!
             </Button>
-          </form>
-          {Object.keys(errorsPaletteName).length !== 0 ? (
-            <div
-              className={css`
-                ${styles.error}
-              `}
-            >
-              {errorsPaletteName?.saveNewPalette.message}
-            </div>
-          ) : null}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
-        </DialogActions>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
