@@ -189,8 +189,6 @@ export default function NewPaletteForm(props) {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            // display: "flex",
-            // alignItems: "center",
           },
         }}
         variant="persistent"

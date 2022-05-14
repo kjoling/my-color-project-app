@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import PaletteMetaForm from "./PaletteMetaForm";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { Button } from "@mui/material";
@@ -15,9 +16,6 @@ import { Link } from "react-router-dom";
 import { css } from "@emotion/css";
 
 const drawerWidth = 400;
-const defaultValues = {
-  colorName: "purple",
-};
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -41,29 +39,6 @@ const AppBar = styled(MuiAppBar, {
 
 export default function PaletteFormNav(props) {
   const { palettes, open, handleDrawerOpen, savePalette, colors } = props;
-
-  const paletteNameValidationSchema = Yup.object().shape({
-    saveNewPalette: Yup.string()
-      .test("paletteNameCheck", "Name is already taken", (value) => {
-        return palettes.every(
-          ({ paletteName }) => paletteName.toLowerCase() !== value.toLowerCase()
-        );
-      })
-      .required("Value cannot be blank")
-      .test("colorsCheck", "Must choose at least 1 color to save!", () => {
-        console.log(colors);
-        return colors.length !== 0;
-      }),
-  });
-
-  const {
-    handleSubmit: handlePaletteNameSubmit,
-    control: controlPaletteName,
-    formState: { errors: errorsPaletteName },
-  } = useForm(
-    { resolver: yupResolver(paletteNameValidationSchema) },
-    defaultValues
-  );
 
   return (
     <div
@@ -92,36 +67,11 @@ export default function PaletteFormNav(props) {
             ${styles.navBtns}
           `}
         >
-          <form onSubmit={handlePaletteNameSubmit((data) => savePalette(data))}>
-            <Controller
-              control={controlPaletteName}
-              name="saveNewPalette"
-              render={({ field: { onChange, onBlur, value = "" } }) => (
-                <div>
-                  <TextField
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    variant="filled"
-                    required
-                    placeholder="Palette Name"
-                  />
-                </div>
-              )}
-            />
-            <Button variant="contained" color="primary" type="submit">
-              Save New Palette!
-            </Button>
-          </form>
-          {Object.keys(errorsPaletteName).length !== 0 ? (
-            <div
-              className={css`
-                ${styles.error}
-              `}
-            >
-              {errorsPaletteName?.saveNewPalette.message}
-            </div>
-          ) : null}
+          <PaletteMetaForm
+            palettes={palettes}
+            savePalette={savePalette}
+            colors={colors}
+          />
           <div>
             <Link
               to="/"
