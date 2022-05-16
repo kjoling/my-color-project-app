@@ -1,6 +1,7 @@
 import React from "react";
 import { css } from "@emotion/css";
 import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function MiniPalette(props) {
   const { paletteName, emoji, colors, id } = props;
@@ -23,6 +24,18 @@ export default function MiniPalette(props) {
         ${styles.root}
       `}
     >
+      <div
+        className={css`
+          ${styles.delete}
+        `}
+      >
+        <DeleteIcon
+          className={css`
+            ${styles.deleteIcon}
+          `}
+          style={{ transition: "all 0.3s ease-in-out" }}
+        />{" "}
+      </div>
       <div
         className={css`
           ${styles.colors}
@@ -57,6 +70,9 @@ const styles = {
     position: "relative",
     overflow: "hidden",
     height: "max-content",
+    "&:hover svg": {
+      opacity: "1",
+    },
   },
   colors: {
     backgroundColor: "#dae1e4",
@@ -90,19 +106,17 @@ const styles = {
     position: "relative",
     marginBottom: "-3.5px",
   },
+  delete: {},
+  deleteIcon: {
+    color: "white",
+    backgroundColor: "#eb3d30",
+    width: "20px",
+    height: "20px",
+    position: "absolute",
+    right: "0",
+    top: "0",
+    padding: "10px",
+    "z-index": "10",
+    opacity: "0",
+  },
 };
-// const root = {};
-// const colors = {};
-// const title = {};
-// const emoji = {};
-
-//adding styles object
-// const styles = {
-//   'background-color': "hotpink",
-//   "&:hover": {
-//     color: `${color}`,
-//     cursor: "pointer",
-//   },
-// };
-
-//sample how to add styles
