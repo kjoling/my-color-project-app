@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Palette from "./Palette";
 import seedColors from "./seedColors";
 import { Routes, Route } from "react-router-dom";
@@ -8,10 +8,15 @@ import SingleColorPalette from "./SingleColorPalette";
 import NewPaletteForm from "./NewPaletteForm";
 
 function App() {
-  const [palette, setPalette] = useState(seedColors);
+  const savedPalettes = JSON.parse(window.localStorage.getItem("palettes"));
+  const [palette, setPalette] = useState(savedPalettes || seedColors);
   const savePalette = (newPalette) => {
     setPalette((currentPalettes) => [...currentPalettes, newPalette]);
   };
+
+  useEffect(() => {
+    window.localStorage.setItem("palettes", JSON.stringify(palette));
+  }, [palette]);
 
   return (
     <div>

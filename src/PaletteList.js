@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import MiniPalette from "./MiniPalette";
 import { css } from "@emotion/css";
 
-
 export default function PaletteList(props) {
   const { palettes } = props;
   const paletteIcons = palettes.map((palette) => {
