@@ -7,7 +7,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/css";
 
@@ -59,7 +59,7 @@ export default function PaletteFormNav(props) {
             edge="start"
             sx={{ mr: 2, ...(open && { display: "none" }) }}
           >
-            <MenuIcon />
+            <AddCircleOutlineIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
             Create Your Own Color Palette:
