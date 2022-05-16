@@ -10,7 +10,6 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/css";
-import { CenterFocusStrong } from "@mui/icons-material";
 
 const drawerWidth = 400;
 
@@ -38,8 +37,9 @@ const AppBar = styled(MuiAppBar, {
 export default function PaletteFormNav(props) {
   const { palettes, open, handleDrawerOpen, savePalette, colors } = props;
   const [formShowing, setFormShowing] = useState(false);
+  const [stage, setStage] = useState("form");
 
-  const showForm = () => {
+  const toggleForm = () => {
     setFormShowing(!formShowing);
   };
 
@@ -70,7 +70,7 @@ export default function PaletteFormNav(props) {
             ${styles.navBtns}
           `}
         >
-          <Button variant="contained" onClick={showForm} sx={styles.button}>
+          <Button variant="contained" onClick={toggleForm} sx={styles.button}>
             Save New Palette
           </Button>
 
@@ -91,7 +91,9 @@ export default function PaletteFormNav(props) {
           palettes={palettes}
           savePalette={savePalette}
           colors={colors}
-          showForm={showForm}
+          toggleForm={toggleForm}
+          stage={stage}
+          setStage={setStage}
         />
       )}
     </div>

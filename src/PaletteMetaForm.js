@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect, useRef, Component } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -10,24 +10,44 @@ import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { css } from "@emotion/css";
+// import data from "@emoji-mart/data";
+// import { Picker } from "emoji-mart";
+import EmojiPicker from "emoji-picker-react";
 
 const defaultValues = {
   colorName: "purple",
 };
 
 export default function PaletteMetaForm(props) {
-  const [open, setOpen] = React.useState(true);
-  const { palettes, savePalette, colors, showForm } = props;
+  const { palettes, savePalette, colors, toggleForm, stage, setStage } = props;
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  //   const ref = React.useRef(null);
+
+  //   const emojiPicker = new Picker({ ...props, data, ref });
+
+  //   useEffect(() => {
+  //     new Picker({ ...props, data, ref });
+  //   }, [toggleForm]);
 
   const handleClose = () => {
-    setOpen(false);
-    showForm(false);
+    toggleForm();
+    setStage("form");
   };
 
+  const showEmojiPicker = () => {
+    setStage("emoji");
+  };
+
+  const handleEmojiSelect = (event, emoji) => {
+    console.log(emoji);
+    // const newPalette = {
+    //   paletteName: "newPaletteName",
+    //   emoji: emoji.native,
+    // };
+    toggleForm();
+    setStage("form");
+    // savePalette(newPalette);
+  };
   const paletteNameValidationSchema = Yup.object().shape({
     saveNewPalette: Yup.string()
       .test("paletteNameCheck", "Name is already taken", (value) => {
@@ -37,7 +57,6 @@ export default function PaletteMetaForm(props) {
       })
       .required("Value cannot be blank")
       .test("colorsCheck", "Must choose at least 1 color to save!", () => {
-        console.log(colors);
         return colors.length !== 0;
       }),
   });
@@ -53,9 +72,30 @@ export default function PaletteMetaForm(props) {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={stage === "emoji"} onClose={handleClose} disablePortal>
+        <DialogTitle id="form-dialog-title">Choose a Palette Emoji</DialogTitle>
+        <div>
+          <EmojiPicker
+            onEmojiClick={handleEmojiSelect}
+            pickerStyle={{ width: "100%" }}
+            preload={true}
+          />
+        </div>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button variant="contained" color="primary" type="submit">
+            Save New Palette!
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={stage === "form"} onClose={handleClose}>
         <DialogTitle>Save New Palette</DialogTitle>
-        <form onSubmit={handlePaletteNameSubmit((data) => savePalette(data))}>
+        <form
+          onSubmit={handlePaletteNameSubmit((data) => {
+            savePalette(data);
+            showEmojiPicker();
+          })}
+        >
           <DialogContent>
             <DialogContentText>
               Please enter a name for your new color palette!

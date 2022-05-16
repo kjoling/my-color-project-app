@@ -158,8 +158,21 @@ export default function NewPaletteForm(props) {
       id: newPaletteName.replace(/ /g, "-"),
     };
     props.saveNewPalette(newPalette);
-    navigate("/");
+    // navigate("/");
   };
+
+  // const showEmojiPicker = () => {
+  //   setStage("emoji");
+  // };
+
+  // const handleEmojiSelect = (emoji) => {
+  //   const newPalette = {
+  //     paletteName: newPaletteName,
+  //     emoji: emoji.native,
+  //   };
+  //   setStage("");
+  //   savePalette(newPalette);
+  // };
   function handleDragEnd(event) {
     const { active, over } = event;
 
@@ -245,6 +258,7 @@ export default function NewPaletteForm(props) {
             changeColor={changeColor}
             onSubmit={onSubmit}
             maxColors={maxColors}
+            addColor={addColor}
           />
           {colors.length < 20 ? (
             <LensBlurIcon
