@@ -4,9 +4,9 @@ import MiniPalette from "./MiniPalette";
 import { css } from "@emotion/css";
 
 export default function PaletteList(props) {
-  const { palettes } = props;
+  const { palettes, deletePalette } = props;
   const paletteIcons = palettes.map((palette) => {
-    return <MiniPalette {...palette} key={palette.id} />;
+    return <MiniPalette {...palette} key={palette.id} deletePalette={deletePalette} />;
   });
   return (
     <div

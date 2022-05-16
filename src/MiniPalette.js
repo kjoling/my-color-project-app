@@ -4,8 +4,12 @@ import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function MiniPalette(props) {
-  const { paletteName, emoji, colors, id } = props;
+  const { paletteName, emoji, colors, id, deletePalette } = props;
   const navigate = useNavigate();
+
+  const handleDelete = (id) => {
+    deletePalette(id);
+  };
   const miniColorBoxes = colors.map((color) => {
     return (
       <div
@@ -24,18 +28,13 @@ export default function MiniPalette(props) {
         ${styles.root}
       `}
     >
-      <div
+      <DeleteIcon
         className={css`
-          ${styles.delete}
+          ${styles.deleteIcon}
         `}
-      >
-        <DeleteIcon
-          className={css`
-            ${styles.deleteIcon}
-          `}
-          style={{ transition: "all 0.3s ease-in-out" }}
-        />{" "}
-      </div>
+        style={{ transition: "all 0.3s ease-in-out" }}
+        onClick={() => handleDelete(id)}
+      />
       <div
         className={css`
           ${styles.colors}
@@ -106,7 +105,6 @@ const styles = {
     position: "relative",
     marginBottom: "-3.5px",
   },
-  delete: {},
   deleteIcon: {
     color: "white",
     backgroundColor: "#eb3d30",
