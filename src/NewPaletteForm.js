@@ -150,29 +150,14 @@ export default function NewPaletteForm(props) {
   };
 
   const savePalette = (data) => {
-    const newPaletteName = data.saveNewPalette;
-
     const newPalette = {
-      paletteName: newPaletteName,
+      ...data,
       colors: colors,
-      id: newPaletteName.replace(/ /g, "-"),
     };
     props.saveNewPalette(newPalette);
-    // navigate("/");
+    navigate("/");
   };
 
-  // const showEmojiPicker = () => {
-  //   setStage("emoji");
-  // };
-
-  // const handleEmojiSelect = (emoji) => {
-  //   const newPalette = {
-  //     paletteName: newPaletteName,
-  //     emoji: emoji.native,
-  //   };
-  //   setStage("");
-  //   savePalette(newPalette);
-  // };
   function handleDragEnd(event) {
     const { active, over } = event;
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Component } from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -10,8 +10,6 @@ import { Controller, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { css } from "@emotion/css";
-// import data from "@emoji-mart/data";
-// import { Picker } from "emoji-mart";
 import EmojiPicker from "emoji-picker-react";
 
 const defaultValues = {
@@ -21,32 +19,27 @@ const defaultValues = {
 export default function PaletteMetaForm(props) {
   const { palettes, savePalette, colors, toggleForm, stage, setStage } = props;
 
-  //   const ref = React.useRef(null);
-
-  //   const emojiPicker = new Picker({ ...props, data, ref });
-
-  //   useEffect(() => {
-  //     new Picker({ ...props, data, ref });
-  //   }, [toggleForm]);
+  const [paletteName, setPaletteName] = useState("");
 
   const handleClose = () => {
     toggleForm();
     setStage("form");
   };
 
-  const showEmojiPicker = () => {
+  const showEmojiPicker = (data) => {
+    setPaletteName(data.saveNewPalette);
     setStage("emoji");
   };
 
   const handleEmojiSelect = (event, emoji) => {
-    console.log(emoji);
-    // const newPalette = {
-    //   paletteName: "newPaletteName",
-    //   emoji: emoji.native,
-    // };
+    const newPalette = {
+      paletteName: paletteName,
+      emoji: emoji.emoji,
+      id: paletteName.replace(/ /g, "-"),
+    };
     toggleForm();
     setStage("form");
-    // savePalette(newPalette);
+    savePalette(newPalette);
   };
   const paletteNameValidationSchema = Yup.object().shape({
     saveNewPalette: Yup.string()
@@ -83,17 +76,13 @@ export default function PaletteMetaForm(props) {
         </div>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" color="primary" type="submit">
-            Save New Palette!
-          </Button>
         </DialogActions>
       </Dialog>
       <Dialog open={stage === "form"} onClose={handleClose}>
         <DialogTitle>Save New Palette</DialogTitle>
         <form
           onSubmit={handlePaletteNameSubmit((data) => {
-            savePalette(data);
-            showEmojiPicker();
+            showEmojiPicker(data);
           })}
         >
           <DialogContent>
