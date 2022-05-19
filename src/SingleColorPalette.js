@@ -8,7 +8,8 @@ import Navbar from "./Navbar";
 // import { css } from "@emotion/css";
 import PaletteFooter from "./PaletteFooter";
 
-export default function SingleColorPalette() {
+export default function SingleColorPalette(props) {
+  const { level } = props;
   const { paletteId, colorId } = useParams();
   const [format, setFormat] = useState("hex");
 
@@ -62,6 +63,7 @@ export default function SingleColorPalette() {
         key={color.name}
         moreUrl={`/palette/${paletteId}`}
         showLink={false}
+        level={level}
       />
     );
   });
@@ -77,7 +79,6 @@ export default function SingleColorPalette() {
           </Link>
         </div>
       </div>
-
       <PaletteFooter
         palette={colorPalette}
         colorId={colorId}

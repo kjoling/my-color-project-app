@@ -56,7 +56,7 @@ export default function ColorBox(props) {
           <Link
             to={moreUrl}
             onClick={(e) => e.stopPropagation()}
-            element={<SingleColorPalette />}
+            element={<SingleColorPalette level={level} />}
           >
             <span
               className={
