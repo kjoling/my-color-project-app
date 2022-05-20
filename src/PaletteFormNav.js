@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link } from "react-router-dom";
 import { css } from "@emotion/css";
+import sizes from "./sizes";
 
 const drawerWidth = 400;
 
@@ -62,7 +63,7 @@ export default function PaletteFormNav(props) {
             <AddCircleOutlineIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Create Your Own Color Palette:
+            Create a Color Palette:
           </Typography>
         </Toolbar>
         <div
@@ -71,7 +72,7 @@ export default function PaletteFormNav(props) {
           `}
         >
           <Button variant="contained" onClick={toggleForm} sx={styles.button}>
-            Save New Palette
+            Save
           </Button>
 
           <Link
@@ -103,6 +104,7 @@ export default function PaletteFormNav(props) {
 const styles = {
   root: {
     display: "flex",
+    marginBottom: "auto",
   },
   error: {
     color: "red",
@@ -116,5 +118,9 @@ const styles = {
   },
   button: {
     margin: "auto 0.5rem",
+    [sizes.down("sm")]: {
+      margin: "0.05rem .1rem",
+      padding: "0.05rem",
+    },
   },
 };

@@ -3,15 +3,29 @@ import { css } from "@emotion/css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import sizes from "./sizes.js";
+
 const styles = {
   root: {
-    width: "25%",
-    height: "25%",
+    width: "20%",
+    height: "30%",
     margin: "0 auto",
     display: "inline-block",
     position: "relative",
     cursor: "pointer",
-    marginBottom: "-3.5px",
+    marginBottom: "-5.5px",
+    [sizes.down("md")]: {
+      width: "25%",
+      height: "25%",
+    },
+    [sizes.down("sm")]: {
+      width: "50%",
+      height: "12%",
+    },
+    [sizes.down("xs")]: {
+      width: "100%",
+      height: "6%",
+    },
   },
   boxContent: {
     position: "absolute",

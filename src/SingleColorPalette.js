@@ -88,9 +88,3 @@ export default function SingleColorPalette(props) {
     </div>
   );
 }
-
-// const styles = {
-//   footer: {
-//     textTransform: "capitalize",
-//   },
-// };

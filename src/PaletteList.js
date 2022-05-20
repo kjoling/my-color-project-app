@@ -2,11 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import MiniPalette from "./MiniPalette";
 import { css } from "@emotion/css";
+import sizes from "./sizes";
 
 export default function PaletteList(props) {
   const { palettes, deletePalette } = props;
   const paletteIcons = palettes.map((palette) => {
-    return <MiniPalette {...palette} key={palette.id} deletePalette={deletePalette} />;
+    return (
+      <MiniPalette
+        {...palette}
+        key={palette.id}
+        deletePalette={deletePalette}
+      />
+    );
   });
   return (
     <div
@@ -53,6 +60,10 @@ const styles = {
     display: "flex",
     alignItems: "flex-start",
     flexFlow: "column wrap",
+    [sizes.down("lg")]: {
+      width: "80%",
+      alignItems: "center",
+    },
   },
   nav: {
     display: "flex",
@@ -77,7 +88,14 @@ const styles = {
     width: "100%",
     display: "grid",
     gridTemplateColumns: "repeat(3, 30%)",
-    gridGap: "5%",
+    gridGap: "2rem",
     marginBottom: "auto",
+    [sizes.down("md")]: {
+      gridTemplateColumns: "repeat(2, 50%)",
+    },
+    [sizes.down("sm")]: {
+      gridTemplateColumns: "repeat(1, 100%)",
+      width: "60%",
+    },
   },
 };

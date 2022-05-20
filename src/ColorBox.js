@@ -79,6 +79,7 @@ export default function ColorBox(props) {
     </CopyToClipboard>
   );
 }
+
 const seeMore = "see-more ";
 
 const styles = {
