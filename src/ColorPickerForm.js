@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@mui/material";
 import { ChromePicker } from "react-color";
 import { useForm, Controller } from "react-hook-form";
