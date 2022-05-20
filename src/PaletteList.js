@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import MiniPalette from "./MiniPalette";
 import { css } from "@emotion/css";
 import sizes from "./sizes";
+import bg from "./bg.svg";
 
 export default function PaletteList(props) {
   const { palettes, deletePalette } = props;
@@ -31,7 +32,7 @@ export default function PaletteList(props) {
             ${styles.nav}
           `}
         >
-          <h1>Palette List!</h1>
+          <h1>Palette List</h1>
           <Link to="/palette/new">New Palette Form</Link>
         </nav>
         <div
@@ -48,7 +49,8 @@ export default function PaletteList(props) {
 
 const styles = {
   root: {
-    backgroundColor: "blue",
+    /* Background by svgbackgrounds.com */
+    backgroundImage: `url(${bg})`,
     height: "100vh",
     display: "flex",
     alignItems: "flex-start",
