@@ -106,6 +106,7 @@
   opacity: 0;
   color: white;
   text-transform: uppercase;
+  pointer-events: none;
 }
 
 .copy-msg.show {
@@ -114,6 +115,7 @@
   z-index: 25;
   transition: all 0.4s ease-in-out;
   transition-delay: 0.3s;
+  pointer-events: all;
 }
 
 .copy-msg h1 {
