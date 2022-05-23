@@ -1,11 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { css } from "@emotion/css";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+} from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseIcon from "@mui/icons-material/Close";
+import { blue, red } from "@mui/material/colors";
 
 export default function MiniPalette(props) {
   const { paletteName, emoji, colors, id, deletePalette } = props;
+  const [openDelete, setOpenDelete] = useState(false);
   const navigate = useNavigate();
+
+  const handleClose = () => {
+    setOpenDelete(false);
+  };
+  const handleOpen = () => {
+    setOpenDelete(true);
+  };
 
   const handleDelete = (id) => {
     deletePalette(id);
@@ -28,12 +49,46 @@ export default function MiniPalette(props) {
         ${styles.root}
       `}
     >
+      <Dialog
+        open={openDelete}
+        onClose={handleClose}
+        disablePortal
+        aria-labelledby="delete-dialog-title"
+      >
+        <DialogTitle id="delete-dialog-title">
+          Delete {paletteName} {emoji}?
+        </DialogTitle>
+        <List>
+          <DialogActions>
+            <ListItem button onClick={() => handleDelete(id)}>
+              <ListItemAvatar>
+                <Avatar
+                  style={{ backgroundColor: blue[100], color: blue[600] }}
+                >
+                  <CheckCircleIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText>Delete</ListItemText>
+            </ListItem>
+          </DialogActions>
+          <DialogActions>
+            <ListItem button onClick={handleClose}>
+              <ListItemAvatar>
+                <Avatar style={{ backgroundColor: red[100], color: red[600] }}>
+                  <CloseIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText>Cancel</ListItemText>
+            </ListItem>
+          </DialogActions>
+        </List>
+      </Dialog>
       <DeleteIcon
         className={css`
           ${styles.deleteIcon}
         `}
         style={{ transition: "all 0.3s ease-in-out" }}
-        onClick={() => handleDelete(id)}
+        onClick={handleOpen}
       />
       <div
         className={css`

@@ -1,20 +1,18 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import seedColors from "./seedColors";
 import { Navigate } from "react-router-dom";
 import { generatePalette } from "./ColorHelper";
 import ColorBox from "./ColorBox";
 import Navbar from "./Navbar";
-// import { css } from "@emotion/css";
 import PaletteFooter from "./PaletteFooter";
 
 export default function SingleColorPalette(props) {
-  const { level } = props;
+  const { level, palettes } = props;
   const { paletteId, colorId } = useParams();
   const [format, setFormat] = useState("hex");
 
   const findPalette = (id) => {
-    return seedColors.find(function (palette) {
+    return palettes.find(function (palette) {
       return palette.id.toLowerCase() === id.toLowerCase();
     });
   };

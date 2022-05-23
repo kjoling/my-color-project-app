@@ -124,7 +124,6 @@ export default function NewPaletteForm(props) {
     setOpen(false);
   };
   const deleteColor = (colorName) => {
-    console.log("Deleted?");
     setColors(
       colors.filter((color) => {
         return color.name.toLowerCase() !== colorName.toLowerCase();
