@@ -20,7 +20,7 @@ export default function MiniPalette(props) {
   const { paletteName, emoji, colors, id, deletePalette } = props;
   const [openDelete, setOpenDelete] = useState(false);
   const navigate = useNavigate();
-
+  console.log("test");
   const handleClose = () => {
     setOpenDelete(false);
   };
