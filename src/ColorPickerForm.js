@@ -80,13 +80,13 @@ export default function ColorPickerForm(props) {
           )}
         />
         {Object.keys(errorsColorName).length !== 0 ? (
-          <div
+          <span
             className={css`
               ${styles.error}
             `}
           >
             {errorsColorName?.colorName.message}
-          </div>
+          </span>
         ) : null}
         <Button
           variant="contained"

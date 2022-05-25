@@ -108,13 +108,13 @@ export default function PaletteMetaForm(props) {
               )}
             />
             {Object.keys(errorsPaletteName).length !== 0 ? (
-              <div
+              <span
                 className={css`
                   ${styles.error}
                 `}
               >
                 {errorsPaletteName?.saveNewPalette.message}
-              </div>
+              </span>
             ) : null}
           </DialogContent>
           <DialogActions>

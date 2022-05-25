@@ -103,6 +103,12 @@ export default function NewPaletteForm(props) {
   const addRandomColor = () => {
     //pick random color from all palettes that are currently stored, no duplicate colors added
     let randomColor = getRandomColor();
+    for (let i = 0; i < colors.length; i++) {
+      if (colors[i].name === randomColor.name) {
+        console.log("Duplicate color!", randomColor.name);
+        randomColor = getRandomColor();
+      }
+    }
     setColors((oldColors) => [...oldColors, randomColor]);
     setCurrentColor(randomColor.color);
   };
