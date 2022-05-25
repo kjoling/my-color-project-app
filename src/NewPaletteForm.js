@@ -80,9 +80,10 @@ export default function NewPaletteForm(props) {
   };
 
   const randColor = getRandomColor().color;
+  const getRandomPalette = Math.floor(Math.random() * seedColors.length);
 
   const [currentColor, setCurrentColor] = useState(randColor);
-  const [colors, setColors] = useState(seedColors[0].colors);
+  const [colors, setColors] = useState(seedColors[getRandomPalette].colors);
   const navigate = useNavigate();
   const sensors = useSensors(
     useSensor(PointerSensor, {
