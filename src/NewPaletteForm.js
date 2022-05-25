@@ -28,6 +28,7 @@ import {
   sortableKeyboardCoordinates,
   rectSwappingStrategy,
 } from "@dnd-kit/sortable";
+import seedColors from "./seedColors";
 
 const drawerWidth = 400;
 const defaultValues = {
@@ -73,7 +74,7 @@ export default function NewPaletteForm(props) {
   const [open, setOpen] = React.useState(false);
 
   const getRandomColor = () => {
-    const allColors = palettes.map((palette) => palette.colors).flat();
+    const allColors = seedColors.map((palette) => palette.colors).flat();
     const rand = Math.floor(Math.random() * allColors.length);
     return allColors[rand];
   };
@@ -81,7 +82,7 @@ export default function NewPaletteForm(props) {
   const randColor = getRandomColor().color;
 
   const [currentColor, setCurrentColor] = useState(randColor);
-  const [colors, setColors] = useState(palettes[0].colors);
+  const [colors, setColors] = useState(seedColors[0].colors);
   const navigate = useNavigate();
   const sensors = useSensors(
     useSensor(PointerSensor, {
