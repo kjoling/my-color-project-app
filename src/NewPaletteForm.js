@@ -29,6 +29,7 @@ import {
   rectSwappingStrategy,
 } from "@dnd-kit/sortable";
 import seedColors from "./seedColors";
+import { colorChannel } from "@mui/system";
 
 const drawerWidth = 400;
 const defaultValues = {
@@ -102,7 +103,11 @@ export default function NewPaletteForm(props) {
 
   const addRandomColor = () => {
     //pick random color from all palettes that are currently stored
-    const randomColor = getRandomColor();
+    let randomColor = getRandomColor();
+    while (colors.some((color) => color.color === randomColor.color)) {
+      console.log("Duplicate color!", randomColor);
+      randomColor = getRandomColor();
+    }
     setColors((oldColors) => [...oldColors, randomColor]);
     setCurrentColor(randomColor.color);
   };
