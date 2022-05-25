@@ -1,25 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { css } from "@emotion/css";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+} from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseIcon from "@mui/icons-material/Close";
+import { blue, red } from "@mui/material/colors";
 
 export default function MiniPalette(props) {
-  const { paletteName, emoji, colors, id, handleOpen } = props;
-  // const [openDelete, setOpenDelete] = useState(false);
+  const { paletteName, emoji, colors, id, deletePalette } = props;
+  const [openDelete, setOpenDelete] = useState(false);
   const navigate = useNavigate();
 
-  // const handleClose = () => {
-  //   setOpenDelete(false);
-  // };
-  // const handleOpen = () => {
-  //   setOpenDelete(true);
-  // };
+  const handleClose = () => {
+    setOpenDelete(false);
+  };
+  const handleOpen = () => {
+    setOpenDelete(true);
+  };
 
-  // const handleDelete = (id) => {
-  //   deletePalette(id);
-  //   setInProp(true);
-  // };
-
+  const handleDelete = (id) => {
+    deletePalette(id);
+  };
   const miniColorBoxes = colors.map((color) => {
     return (
       <div
@@ -38,7 +49,7 @@ export default function MiniPalette(props) {
         ${styles.root}
       `}
     >
-      {/* <Dialog
+      <Dialog
         open={openDelete}
         onClose={handleClose}
         disablePortal
@@ -71,40 +82,35 @@ export default function MiniPalette(props) {
             </ListItem>
           </DialogActions>
         </List>
-      </Dialog> */}
-      <div>
-        <DeleteIcon
-          className={css`
-            ${styles.deleteIcon}
-          `}
-          style={{ transition: "all 0.3s ease-in-out" }}
-          onClick={() => {
-            return handleOpen(id);
-          }}
-        />
-
-        <div
-          className={css`
-            ${styles.colors}
-          `}
-        >
-          {miniColorBoxes}
-        </div>
-        <h5
-          className={css`
-            ${styles.title}
-          `}
-        >
-          {paletteName}
-          <span
-            className={css`
-              ${styles.emoji}
-            `}
-          >
-            {emoji}
-          </span>
-        </h5>
+      </Dialog>
+      <DeleteIcon
+        className={css`
+          ${styles.deleteIcon}
+        `}
+        style={{ transition: "all 0.3s ease-in-out" }}
+        onClick={handleOpen}
+      />
+      <div
+        className={css`
+          ${styles.colors}
+        `}
+      >
+        {miniColorBoxes}
       </div>
+      <h5
+        className={css`
+          ${styles.title}
+        `}
+      >
+        {paletteName}
+        <span
+          className={css`
+            ${styles.emoji}
+          `}
+        >
+          {emoji}
+        </span>
+      </h5>
     </div>
   );
 }
