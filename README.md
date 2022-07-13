@@ -1,8 +1,14 @@
-# Getting Started with Create React App
+# Color Picker App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and is based off of a project from Colt Steele's React bootcamp.  There were modifications from the original as newer versions and different dependencies were used.
+
+## Main purpose
+
+This application was a final project in a React bootcamp.  You can create new color palettes, drag and drop colors, search choose your own colors, name them (no duplicates!), and then you can click on the completed color palettes to copy a hex, rgb or hsla value!
+
+###Available Scripts
 
 In the project directory, you can run:
 
